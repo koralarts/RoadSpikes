@@ -38,6 +38,7 @@ void MainWindow::setupTable()
 {
     QStringList headers;
     headers.append("Chain");
+    headers.append("Interface");
     headers.append("Protocol");
     headers.append("Source");
     headers.append("Destination");
@@ -114,30 +115,32 @@ void MainWindow::buildRule(QString chain, QString line)
 
     this->ui->rulesView->setItem(rowCount, 0,
                                  new QTableWidgetItem(chain));
+    this->ui->rulesView->setItem(rowCount, 1,
+                                 new QTableWidgetItem(rule.at(2)));
     this->ui->rulesView->setItem(rowCount, this->ui->rulesView->columnCount() - 2,
                                  new QTableWidgetItem(rule.at(0)));
-    this->ui->rulesView->setItem(rowCount, 1,
-                                 new QTableWidgetItem(rule.at(1)));
     this->ui->rulesView->setItem(rowCount, 2,
-                                 new QTableWidgetItem(rule.at(3)));
+                                 new QTableWidgetItem(rule.at(1)));
     this->ui->rulesView->setItem(rowCount, 3,
+                                 new QTableWidgetItem(rule.at(3)));
+    this->ui->rulesView->setItem(rowCount, 4,
                                  new QTableWidgetItem(rule.at(4)));
 
     if((portIndex = rule.indexOf(QRegExp("^spt[s]?:.*"))) != -1) {
         if(rule.at(portIndex).contains("spts")) {
-            this->ui->rulesView->setItem(rowCount, 4,
+            this->ui->rulesView->setItem(rowCount, 5,
                                          new QTableWidgetItem(rule.at(portIndex).split("pts:").at(1)));
         } else {
-            this->ui->rulesView->setItem(rowCount, 4,
+            this->ui->rulesView->setItem(rowCount, 5,
                                          new QTableWidgetItem(rule.at(portIndex).split(":").at(1)));
         }
     }
     if((portIndex = rule.indexOf(QRegExp("^dpt[s]?:.*"))) != -1) {
         if(rule.at(portIndex).contains("dpts")) {
-            this->ui->rulesView->setItem(rowCount, 5,
+            this->ui->rulesView->setItem(rowCount, 6,
                                          new QTableWidgetItem(rule.at(portIndex).split("pts:").at(1)));
         } else {
-            this->ui->rulesView->setItem(rowCount, 5,
+            this->ui->rulesView->setItem(rowCount, 6,
                                          new QTableWidgetItem(rule.at(portIndex).split(":").at(1)));
         }
     }

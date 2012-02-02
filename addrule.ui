@@ -7,156 +7,154 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>375</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>240</width>
-    <height>280</height>
+    <width>420</width>
+    <height>432</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>600</width>
-    <height>600</height>
+    <width>420</width>
+    <height>441</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Add Rule</string>
   </property>
-  <widget class="QDialogButtonBox" name="okCancel">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>330</y>
-     <width>221</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>421</width>
-     <height>331</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout">
-    <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-    </property>
-    <property name="leftMargin">
-     <number>5</number>
-    </property>
-    <property name="topMargin">
-     <number>5</number>
-    </property>
-    <property name="rightMargin">
-     <number>5</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="chainLabel">
-      <property name="text">
-       <string>Chain:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="chainText"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="protLabel">
-      <property name="text">
-       <string>Protocol:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="protText"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="sourceIpLabel">
-      <property name="text">
-       <string>Source IP:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="sourceIPText"/>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="destIpLabel">
-      <property name="text">
-       <string>Dest IP:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="destIpText"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="sportLabel">
-      <property name="text">
-       <string>Source Port:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="sportText"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="dportLabel">
-      <property name="text">
-       <string>Dest Port:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="dportText"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="targetLabel">
-      <property name="text">
-       <string>Target:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLineEdit" name="targetText"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="customLabel">
-      <property name="text">
-       <string>Other:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QPlainTextEdit" name="customText">
-      <property name="whatsThis">
-       <string>Add miscellaneous switches in the proper order, every switch or pair of switches must be put in a new line.
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="chainLabel">
+       <property name="text">
+        <string>Chain:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="chainText"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="protLabel">
+       <property name="text">
+        <string>Protocol:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="protText"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="sourceIpLabel">
+       <property name="text">
+        <string>Source IP:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="sourceIPText"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="destIpLabel">
+       <property name="text">
+        <string>Dest IP:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="destIpText"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="sportLabel">
+       <property name="text">
+        <string>Source Port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="sportText"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="dportLabel">
+       <property name="text">
+        <string>Dest Port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="dportText"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="targetLabel">
+       <property name="text">
+        <string>Target:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="targetText"/>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="customLabel">
+       <property name="text">
+        <string>Other:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QPlainTextEdit" name="customText">
+       <property name="whatsThis">
+        <string>Add miscellaneous switches in the proper order, every switch or pair of switches must be put in a new line.
 
 Example:
 
 -S
 -m state --state NEW,ESTABLISHED</string>
-      </property>
-      <property name="plainText">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+       </property>
+       <property name="plainText">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="interfaceLabel">
+       <property name="text">
+        <string>Interface:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="interfaceText"/>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="okCancel">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

@@ -25,6 +25,10 @@ void AddRule::on_okCancel_accepted()
         switches.append("-A");
         switches.append(this->ui->chainText->text());
     }
+    if(this->ui->interfaceText->text().size() != 0) {
+        switches.append("-i");
+        switches.append(this->ui->interfaceText->text());
+    }
     if(this->ui->protText->text().size() != 0) {
         switches.append("-p");
         switches.append(this->ui->protText->text());
