@@ -12,11 +12,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    firewall.cpp
+    firewall.cpp \
+    addrule.cpp
 
 HEADERS  += mainwindow.h \
-    firewall.h
+    firewall.h \
+    addrule.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    addrule.ui
+
+
+
 
 

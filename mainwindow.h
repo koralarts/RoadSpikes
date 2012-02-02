@@ -18,8 +18,15 @@ public:
 private slots:
 	void on_actionExit_triggered();
 
+	void on_addRuleButton_clicked();
+
 private:
 	Ui::MainWindow *ui; /** Form containing the main window GUI */
+
+	void setupTable();
+	void getIptable();
+	void parseResult(QByteArray result);
+	void buildRule(QString chain, QString line);
 };
 
 #endif // MAINWINDOW_H
