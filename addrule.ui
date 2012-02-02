@@ -136,12 +136,24 @@
     <item row="7" column="0">
      <widget class="QLabel" name="customLabel">
       <property name="text">
-       <string>Custom:</string>
+       <string>Other:</string>
       </property>
      </widget>
     </item>
     <item row="7" column="1">
-     <widget class="QPlainTextEdit" name="customText"/>
+     <widget class="QPlainTextEdit" name="customText">
+      <property name="whatsThis">
+       <string>Add miscellaneous switches in the proper order, every switch or pair of switches must be put in a new line.
+
+Example:
+
+-S
+-m state --state NEW,ESTABLISHED</string>
+      </property>
+      <property name="plainText">
+       <string/>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

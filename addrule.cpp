@@ -1,6 +1,7 @@
 #include "addrule.h"
 #include "ui_addrule.h"
 #include <QProcess>
+#include <QDebug>
 
 AddRule::AddRule(QWidget *parent) :
     QDialog(parent),
@@ -44,16 +45,17 @@ void AddRule::on_okCancel_accepted()
 		switches.append("--dport");
 		switches.append(this->ui->dportText->text());
 	}
+
+	customs = this->ui->customText->toPlainText().split("\n", QString::SkipEmptyParts);
+
+	for(int i = 0; i < customs.size(); i++) {
+		switches.append(customs.at(i).split(" ", QString::SkipEmptyParts));
+	}
+
 	if(this->ui->targetText->text().size() != 0) {
 		switches.append("-j");
 		switches.append(this->ui->targetText->text());
 	}
 
 	iptable.startDetached("iptables", switches);
-
-	customs = this->ui->customText->toPlainText().split("\n", QString::SkipEmptyParts);
-
-	for(int i = 0; i < customs.size(); i++) {
-
-	}
 }

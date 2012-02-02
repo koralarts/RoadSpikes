@@ -102,18 +102,44 @@ void MainWindow::parseResult(QByteArray res)
 void MainWindow::buildRule(QString chain, QString line)
 {
 	QStringList rule;
+	QString portLine;
 	int rowCount;
+	int portIndex;
 
 	rule = line.split(" ", QString::SkipEmptyParts);
 	rowCount = this->ui->rulesView->rowCount();
 
 	this->ui->rulesView->insertRow(rowCount);
+
 	this->ui->rulesView->setItem(rowCount, 0,
 								 new QTableWidgetItem(chain));
 	this->ui->rulesView->setItem(rowCount, this->ui->rulesView->columnCount() -1,
 								 new QTableWidgetItem(rule.at(0)));
 	this->ui->rulesView->setItem(rowCount, 1,
 								 new QTableWidgetItem(rule.at(1)));
+	this->ui->rulesView->setItem(rowCount, 2,
+								 new QTableWidgetItem(rule.at(3)));
+	this->ui->rulesView->setItem(rowCount, 3,
+								 new QTableWidgetItem(rule.at(4)));
+
+	if((portIndex = rule.indexOf(QRegExp("^spt[s]?:.*"))) != -1) {
+		if(rule.at(portIndex).contains("spts")) {
+			this->ui->rulesView->setItem(rowCount, 4,
+										 new QTableWidgetItem(rule.at(portIndex).split("pts:").at(1)));
+		} else {
+			this->ui->rulesView->setItem(rowCount, 4,
+										 new QTableWidgetItem(rule.at(portIndex).split(":").at(1)));
+		}
+	}
+	if((portIndex = rule.indexOf(QRegExp("^dpt[s]?:.*"))) != -1) {
+		if(rule.at(portIndex).contains("dpts")) {
+			this->ui->rulesView->setItem(rowCount, 5,
+										 new QTableWidgetItem(rule.at(portIndex).split("pts:").at(1)));
+		} else {
+			this->ui->rulesView->setItem(rowCount, 5,
+										 new QTableWidgetItem(rule.at(portIndex).split(":").at(1)));
+		}
+	}
 }
 
 void MainWindow::on_addRuleButton_clicked()
