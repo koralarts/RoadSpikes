@@ -1,0 +1,10 @@
+#VARIABLES
+DEF_GATEWAY=192.168.1.3
+
+
+#DEFAULT
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+
