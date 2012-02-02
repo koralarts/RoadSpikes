@@ -44,6 +44,7 @@ void MainWindow::setupTable()
 	headers.append("SPort");
 	headers.append("DPort");
 	headers.append("Target");
+        headers.append("Miscellaneous");
 
 	for(int i = 0; i < headers.size(); i++) {
 		this->ui->rulesView->insertColumn(i);
@@ -102,7 +103,7 @@ void MainWindow::parseResult(QByteArray res)
 void MainWindow::buildRule(QString chain, QString line)
 {
 	QStringList rule;
-	QString portLine;
+        QString miscellaneous;
 	int rowCount;
 	int portIndex;
 
@@ -113,7 +114,7 @@ void MainWindow::buildRule(QString chain, QString line)
 
 	this->ui->rulesView->setItem(rowCount, 0,
 								 new QTableWidgetItem(chain));
-	this->ui->rulesView->setItem(rowCount, this->ui->rulesView->columnCount() -1,
+        this->ui->rulesView->setItem(rowCount, this->ui->rulesView->columnCount() - 2,
 								 new QTableWidgetItem(rule.at(0)));
 	this->ui->rulesView->setItem(rowCount, 1,
 								 new QTableWidgetItem(rule.at(1)));
@@ -140,6 +141,7 @@ void MainWindow::buildRule(QString chain, QString line)
 										 new QTableWidgetItem(rule.at(portIndex).split(":").at(1)));
 		}
 	}
+
 }
 
 void MainWindow::on_addRuleButton_clicked()
