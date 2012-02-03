@@ -27,6 +27,7 @@ private:
 	void getIptable();
 	void parseResult(QByteArray result);
 	void buildRule(QString chain, QString line);
+        void resetTable();
 };
 
 #endif // MAINWINDOW_H

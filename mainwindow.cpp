@@ -147,13 +147,21 @@ void MainWindow::buildRule(QString chain, QString line)
 
 }
 
+void MainWindow::resetTable()
+{
+    int curRowCount = this->ui->rulesView->rowCount();
+    this->ui->rulesView->clear();
+    for(int i = curRowCount - 1; i > -1; i--) {
+        this->ui->rulesView->removeRow(i);
+    }
+}
+
 void MainWindow::on_addRuleButton_clicked()
 {
     AddRule *rules = new AddRule;
 
-    rules->show();
-
-    if(rules->result()) {
+    if(rules->exec()) {
+        resetTable();
         getIptable();
     }
 }
