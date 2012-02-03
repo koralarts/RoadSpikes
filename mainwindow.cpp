@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QProcess>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include "addrule.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -31,7 +32,7 @@ void MainWindow::on_actionExit_triggered()
 }
 
 /**
- * Helpers
+ * HELPERS
  *
  **/
 void MainWindow::setupTable()
@@ -85,9 +86,14 @@ void MainWindow::parseResult(QByteArray res)
     QString result(res);
     QString chain;
     QStringList lines = result.split("\n", QString::SkipEmptyParts);
+    QProgressDialog *progress = new QProgressDialog("Populating Table...", "Cancel", 0, lines.size() - 1, this);
     int counter = 0;
 
+    progress->setWindowModality(Qt::WindowModal);
+    progress->setAutoClose(true);
+
     for(int i = 0; i < lines.size(); i++) {
+        progress->setValue(i);
         //Check if name of chain
         if(lines.at(i).contains("Chain")) {
             chain = lines.at(i).split(" ").at(1);
@@ -98,7 +104,14 @@ void MainWindow::parseResult(QByteArray res)
         if(counter > 2) {
             buildRule(chain, lines.at(i));
         }
+        if(progress->wasCanceled()) {
+            progress->setValue(lines.size() - 1);
+            QMessageBox(QMessageBox::Critical, "Exiting", "Population Cancelled",
+                        QMessageBox::Ok).exec();
+            this->close();
+        }
     }
+
 }
 
 void MainWindow::buildRule(QString chain, QString line)
@@ -156,6 +169,30 @@ void MainWindow::resetTable()
     }
 }
 
+void MainWindow::deleteRule(int row)
+{
+    QProcess *iptable = new QProcess();
+    QString curChain = this->ui->rulesView->item(row, 0)->text();
+    int counter = 1;
+
+    while(row > 0 && this->ui->rulesView->item(row, 0)->text() == curChain) {
+        counter++;
+        row--;
+    }
+
+    iptable->startDetached("iptables", QStringList() << "-D" << curChain << QString::number(counter));
+}
+
+void MainWindow::deleteFlushChain(QString chain, QString flushDelSwitch)
+{
+    QProcess *iptable = new QProcess();
+
+    iptable->startDetached("iptables", QStringList() << flushDelSwitch << chain);
+}
+
+/**
+ * BUTTON SLOTS
+ */
 void MainWindow::on_addRuleButton_clicked()
 {
     AddRule *rules = new AddRule;
@@ -163,5 +200,50 @@ void MainWindow::on_addRuleButton_clicked()
     if(rules->exec()) {
         resetTable();
         getIptable();
+    }
+}
+
+void MainWindow::on_deleteRuleButton_clicked()
+{
+    QModelIndexList selected = this->ui->rulesView->selectionModel()->selectedRows();
+
+    if(selected.size() > 0) {
+        deleteRule(selected.at(0).row());
+        this->ui->rulesView->removeRow(selected.at(0).row());
+    }
+}
+
+void MainWindow::on_flushChainButton_clicked()
+{
+    QModelIndexList selected = this->ui->rulesView->selectionModel()->selectedRows();
+    int row;
+    QString chain;
+
+    if(selected.size() > 0) {
+        row = selected.at(0).row();
+        chain = this->ui->rulesView->item(row, 0)->text();
+        deleteFlushChain(chain, "-X");
+        resetTable();
+        getIptable();
+    }
+}
+
+void MainWindow::on_deleteChainButton_clicked()
+{
+    QModelIndexList selected = this->ui->rulesView->selectionModel()->selectedRows();
+    int row;
+    QString chain;
+
+    if(selected.size() > 0) {
+        row = selected.at(0).row();
+        chain = this->ui->rulesView->item(row, 0)->text();
+        if(QRegExp("INPUT|OUTPUT|FORWARD").exactMatch(chain)) {
+            QMessageBox(QMessageBox::Critical, "Error", "You cannot delete that chain.",
+                        QMessageBox::Ok).exec();
+        } else {
+            deleteFlushChain(chain, "-X");
+            resetTable();
+            getIptable();
+        }
     }
 }
