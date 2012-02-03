@@ -20,6 +20,12 @@ private slots:
 
 	void on_addRuleButton_clicked();
 
+    void on_deleteRuleButton_clicked();
+
+    void on_flushChainButton_clicked();
+
+    void on_deleteChainButton_clicked();
+
 private:
 	Ui::MainWindow *ui; /** Form containing the main window GUI */
 
@@ -27,6 +33,9 @@ private:
 	void getIptable();
 	void parseResult(QByteArray result);
 	void buildRule(QString chain, QString line);
+    void resetTable();
+    void deleteRule(int row);
+    void deleteFlushChain(QString chain, QString flushDelSwitch);
 };
 
 #endif // MAINWINDOW_H
