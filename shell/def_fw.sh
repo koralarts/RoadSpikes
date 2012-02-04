@@ -20,8 +20,8 @@ iptables -A INPUT -p tcp --dport 23 -j DROP
 iptables -A OUTPUT -p tcp --sport 23 -j DROP
 
 #DROP ALL TCP PACKETS WITH THE SYN AND FIN BIT SET
-iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN-j DROP
-iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN-j DROP
+iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
 iptables -A INPUT -p tcp -j ACCEPT
