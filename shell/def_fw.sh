@@ -44,7 +44,7 @@ iptables -t mangle -A PREROUTING -p tcp --dport $SSH_PORT -j TOS --set-tos Minim
 iptables -t mangle -A PREROUTING -p tcp --dport $FTP_CONTROL -j TOS --set-tos Minimize-Delay
 
 #SET FTP DATA TO MAXIMUM THROUGHPUT
-iptables -A OUTPUT -t mangle -p tcp --dport $FTP_PORT -j ACCEPT --set-tos Maximize-Throughput
+iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Maximize-Throughput
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
 iptables -A INPUT -p tcp -j ACCEPT
