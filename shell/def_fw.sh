@@ -30,13 +30,7 @@ iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
 #DROP ALL PACKETS WITH A SOURCE ADDRESS FROM OUTSIDE THE INTERNAL NETWORK
 
 
-#REJECT PACKETS GOING THE WRONG WAY
-
-
 #ACCEPT FRAGMENTS
-
-
-#ACCEPT ALL TCP PACKETS THAT BELONG TO AN EXISTING CONNECTION
 
 
 #SET SSH AND FTP CONTROL CONNECTIONS TO MINIMUM DELAY
@@ -47,9 +41,12 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_CONTROL -j TOS --set-tos Mi
 iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Maximize-Throughput
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
-iptables -A INPUT -p tcp -j ACCEPT
-iptables -A OUTPUT -p tcp -j ACCEPT
-iptables -A INPUT -p udp -j ACCEPT
-iptables -A OUTPUT -p udp -j ACCEPT
-iptables -A INPUT -p icmp -j ACCEPT
-iptables -A OUTPUT -p icmp -j ACCEPT
+#ACCEPT ALL TCP PACKETS THAT BELONG TO AN EXISTING CONNECTION
+#ONLY ALLOW NEW AND ESTABLISHED TRAFFIC
+#REJECT PACKETS GOING THE WRONG WAY
+iptables -A INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p icmp -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
