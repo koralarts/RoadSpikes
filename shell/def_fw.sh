@@ -40,8 +40,8 @@ iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
 
 
 #SET SSH AND FTP CONTROL CONNECTIONS TO MINIMUM DELAY
-iptables -A OUTPUT -t mangle -p tcp --dport $SSH_PORT -j ACCEPT --set-tos Minimize-Delay
-iptables -A OUTPUT -t mangle -p tcp --dport $FTP_CONTROL -j ACCEPT --set-tos Minimize-Delay
+iptables -t mangle -A PREROUTING -p tcp --dport $SSH_PORT -j TOS --set-tos Minimize-Delay
+iptables -t mangle -A PREROUTING -p tcp --dport $FTP_CONTROL -j TOS --set-tos Minimize-Delay
 
 #SET FTP DATA TO MAXIMUM THROUGHPUT
 iptables -A OUTPUT -t mangle -p tcp --dport $FTP_PORT -j ACCEPT --set-tos Maximize-Throughput
