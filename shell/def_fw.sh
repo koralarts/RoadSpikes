@@ -4,8 +4,8 @@ IN_INTERFACE="p3p1"
 OUT_INTERFACE="em1"
 TELNET_PORT="23"
 SSH_PORT="22"
-FTP_CONTROL="21"
-FTP_PORT="20"
+FTP_PORT="21"
+FTP_DATA="20"
 
 #DEFAULT POLICIES
 iptables -P INPUT DROP
@@ -35,10 +35,10 @@ iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
 
 #SET SSH AND FTP CONTROL CONNECTIONS TO MINIMUM DELAY
 iptables -t mangle -A PREROUTING -p tcp --dport $SSH_PORT -j TOS --set-tos Minimize-Delay
-iptables -t mangle -A PREROUTING -p tcp --dport $FTP_CONTROL -j TOS --set-tos Minimize-Delay
+iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Minimize-Delay
 
 #SET FTP DATA TO MAXIMUM THROUGHPUT
-iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Maximize-Throughput
+iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maximize-Throughput
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
 #ACCEPT ALL TCP PACKETS THAT BELONG TO AN EXISTING CONNECTION
