@@ -23,6 +23,10 @@ iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 
+#ALLOW FORWARDING IN IN_INTERFACE
+iptables --table nat --append POSTROUTING --out-interface em1 -j MASQUERADE
+iptables -t nat -A PREROUTING -p tcp -i em1 --dport 22 -j DNAT --to 192.168.1.2:22
+
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
 
