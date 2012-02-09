@@ -39,7 +39,7 @@ void MainWindow::setupTable()
 {
     QStringList headers;
     headers.append("Chain");
-    headers.append("Interface");
+    headers.append("Option");
     headers.append("Protocol");
     headers.append("Source");
     headers.append("Destination");
@@ -68,15 +68,14 @@ void MainWindow::getIptable()
                     QMessageBox::Ok).show();
     }
 
-    //Wait for data before reading
-    iptable->waitForReadyRead();
-    result = iptable->readAllStandardOutput();
-
     //Check if iptable finished
     if(!iptable->waitForFinished()) {
         QMessageBox(QMessageBox::Critical, "Error", "iptables stalled",
                     QMessageBox::Ok).show();
     }
+    //Wait for data before reading
+    iptable->waitForReadyRead();
+    result = iptable->readAllStandardOutput();
 
     parseResult(result);
 }
@@ -187,7 +186,7 @@ void MainWindow::deleteFlushChain(QString chain, QString flushDelSwitch)
 {
     QProcess *iptable = new QProcess();
 
-    iptable->startDetached("iptables", QStringList() << flushDelSwitch << chain);
+    iptable->startDetached("iptables", QStringList() << flushDelSwitch << chain );
 }
 
 /**
@@ -222,7 +221,7 @@ void MainWindow::on_flushChainButton_clicked()
     if(selected.size() > 0) {
         row = selected.at(0).row();
         chain = this->ui->rulesView->item(row, 0)->text();
-        deleteFlushChain(chain, "-X");
+        deleteFlushChain(chain, "--flush");
         resetTable();
         getIptable();
     }
@@ -241,7 +240,7 @@ void MainWindow::on_deleteChainButton_clicked()
             QMessageBox(QMessageBox::Critical, "Error", "You cannot delete that chain.",
                         QMessageBox::Ok).exec();
         } else {
-            deleteFlushChain(chain, "-X");
+            deleteFlushChain(chain, "--delete-chain");
             resetTable();
             getIptable();
         }
