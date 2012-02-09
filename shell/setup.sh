@@ -7,8 +7,8 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 
 
 # IPTABLES
-iptables -F
-iptables -X
+#iptables -F
+#iptables -X
 
-iptables --table nat --append POSTROUTING --out-interface em1 -j MASQUERADE
-iptables --append FORWARD --in-interface p3p1 -j ACCEPT
+#iptables --table nat --append POSTROUTING --out-interface em1 -j MASQUERADE
+#iptables --append FORWARD --in-interface p3p1 -j ACCEPT
