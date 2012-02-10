@@ -31,7 +31,7 @@ iptables -t nat -A PREROUTING -p tcp -i em1 --dport 22 -j DNAT --to 192.168.1.2:
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
 
 #DROP ALL PACKETS WITH A SOURCE ADDRESS FROM OUTSIDE THE INTERNAL NETWORK
-#iptables -A FORWARD -p all ! -s $INTERNAL_NETWORK -j DROP
+iptables -A INPUT -p all ! -s $INTERNAL_NETWORK -j DROP
 
 #SSH TEST
 iptables -A INPUT -i $EX_INTERFACE -p tcp --sport $SSH_PORT -j ACCEPT
@@ -45,13 +45,9 @@ iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports 111,515 -j DRO
 
 #BLOCK ALL TELNET PACKETS
 iptables -A FORWARD -p tcp --sport $TELNET_PORT -j DROP
-#iptables -A OUTPUT -p tcp --dport $TELNET_PORT -j DROP
 
 #DROP ALL TCP PACKETS WITH THE SYN AND FIN BIT SET
-iptables -A FORWARD -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
-#iptables -A OUTPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
-
-
+iptables -A FORWARD -p tcp --tcp-flags ALL,FIN SYN -j DROP
 
 #ACCEPT FRAGMENTS
 iptables -A FORWARD -f -j ACCEPT
@@ -68,8 +64,6 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maxim
 #ONLY ALLOW NEW AND ESTABLISHED TRAFFIC
 #REJECT PACKETS GOING THE WRONG WAY
 iptables -A FORWARD -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
-#iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p udp -m state --state NEW,ESTABLISHED -j ACCEPT
-#iptables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
-#iptables -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -m state --state NEW -j DROP
