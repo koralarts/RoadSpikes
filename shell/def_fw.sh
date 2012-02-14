@@ -2,11 +2,12 @@
 ################### USER CONFIGURABLE SECTION ###################
 #################################################################
 
-#VARIABLES
+#USER-DEFINED VARIABLES
 DEF_GATEWAY="192.168.1.3"
 INTERNAL_NETWORK="192.168.1.0/255.255.255.0"
 IN_INTERFACE="p3p1"
 EX_INTERFACE="em1"
+ALLOWED_SERVICES="www,ftp,ftp-data,ssh,1024:65535"
 
 #################################################################
 ##################### IMPLEMENTATION SECTION ####################
@@ -25,13 +26,10 @@ iptables -P OUTPUT DROP
 
 #ALLOW FORWARDING IN IN_INTERFACE
 iptables --table nat --append POSTROUTING --out-interface em1 -j MASQUERADE
-iptables -t nat -A PREROUTING -p tcp -i em1 --dport 22 -j DNAT --to 192.168.1.2:22
+iptables -t nat -A PREROUTING -p tcp -i em1 -m multiport --dports $ALLOWED_SERVICES -j DNAT --to 192.168.1.2
 
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
-
-#SSH TEST
-iptables -A INPUT -i $EX_INTERFACE -p tcp --sport $SSH_PORT -j ACCEPT
 
 #BLOCK ALL EXTERNAL TRAFFIC TO PORTS 32768 - 32775 AND 137 - 139
 iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports 32768:32775,137:139 -j DROP
@@ -64,6 +62,9 @@ iptables -A FORWARD -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p udp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p tcp -m state --state NEW -j DROP
+
+#PORT FORWARDING
+iptables -A FORWARD -i $EX_INTERFACE -p tcp --m multiport --dports $ALLOWED_SERVICES -j ACCEPT
 
 #DROP ALL PACKETS WITH A SOURCE ADDRESS FROM OUTSIDE THE INTERNAL NETWORK
 iptables -A INPUT -i $EX_INTERFACE -p all -s $INTERNAL_NETWORK -j DROP
