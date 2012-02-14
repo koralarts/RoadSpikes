@@ -31,6 +31,9 @@ iptables -t nat -A PREROUTING -p tcp -i em1 -m multiport --dports $ALLOWED_SERVI
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
 
+#BLOCK ALL EXTERNAL TRAFFIC WITH AN IP ADDRESS OF THE INTERNAL NETWORK
+iptables -A FORWARD -i $EX_INTERFACE -s $INTERNAL_NETWORK -j DROP
+
 #BLOCK ALL EXTERNAL TRAFFIC TO PORTS 32768 - 32775 AND 137 - 139
 iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports 32768:32775,137:139 -j DROP
 iptables -A FORWARD -i $EX_INTERFACE -p udp -m multiport --dports 32768:32775,137:139 -j DROP
