@@ -8,6 +8,7 @@ INTERNAL_NETWORK="192.168.1.0/255.255.255.0"
 IN_INTERFACE="p3p1"
 EX_INTERFACE="em1"
 ALLOWED_SERVICES="www,ftp,ftp-data,ssh,1024:65535"
+HIGH_PORTS="1024:65535"
 
 #################################################################
 ##################### IMPLEMENTATION SECTION ####################
@@ -30,6 +31,9 @@ iptables -t nat -A PREROUTING -p tcp -i em1 -m multiport --dports $ALLOWED_SERVI
 
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
+
+#BLOCK ALL INCOMING SYNS FROM HIGH PORTS
+iptables -A FORWARD -p tcp -m multiport ! --sports $ALLOWED_SERVICES -m state --state NEW -j DROP
 
 #BLOCK ALL EXTERNAL TRAFFIC WITH AN IP ADDRESS OF THE INTERNAL NETWORK
 iptables -A FORWARD -i $EX_INTERFACE -s $INTERNAL_NETWORK -j DROP
@@ -57,6 +61,9 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Minim
 #SET FTP DATA TO MAXIMUM THROUGHPUT
 iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maximize-Throughput
 
+#PORT FORWARDING
+iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports $ALLOWED_SERVICES -j ACCEPT
+
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
 #ACCEPT ALL TCP PACKETS THAT BELONG TO AN EXISTING CONNECTION
 #ONLY ALLOW NEW AND ESTABLISHED TRAFFIC
@@ -64,10 +71,3 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maxim
 iptables -A FORWARD -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p udp -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -m state --state NEW -j DROP
-
-#PORT FORWARDING
-iptables -A FORWARD -i $EX_INTERFACE -p tcp --m multiport --dports $ALLOWED_SERVICES -j ACCEPT
-
-#DROP ALL PACKETS WITH A SOURCE ADDRESS FROM OUTSIDE THE INTERNAL NETWORK
-iptables -A INPUT -i $EX_INTERFACE -p all -s $INTERNAL_NETWORK -j DROP
