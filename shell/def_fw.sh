@@ -40,7 +40,10 @@ then
 fi
 if [-n $ICMP_ALLOWED_SERVICES]
 then
-    
+    for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
+    do
+        iptables -t nat -A PREROUTING -p icmp $EX_INERFACE --icmp-type $TYPE -j DNAT --to $INTERNAL_COMPUTER
+    done
 fi
 
 #FORWARDING
@@ -57,7 +60,10 @@ then
 fi
 if [-n $ICMP_ALLOWED_SERVICES]
 then
-    
+    for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
+    do
+        
+    done
 fi
 
 #BLOCK ALL EXTERNAL TRAFFIC WITH AN IP ADDRESS OF THE INTERNAL NETWORK
@@ -97,7 +103,10 @@ then
 fi
 if [-n $ICMP_ALLOWED_SERVICES]
 then
-    
+    for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
+    do
+        iptables -A FORWARD -i $EX_INTERFACE -p icmp --icmp-type $TYPE -j ACCEPT
+    done
 fi
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
