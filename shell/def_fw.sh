@@ -58,13 +58,6 @@ if [-n $UDP_ALLOWED_SERVICES]
 then
     iptables -A FORWARD -p udp -m multiport ! --sports $UDP_ALLOWED_SERVICES -m state --state NEW -j DROP
 fi
-if [-n $ICMP_ALLOWED_SERVICES]
-then
-    for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
-    do
-        
-    done
-fi
 
 #BLOCK ALL EXTERNAL TRAFFIC WITH AN IP ADDRESS OF THE INTERNAL NETWORK
 iptables -A FORWARD -i $EX_INTERFACE -s $INTERNAL_NETWORK -j DROP
