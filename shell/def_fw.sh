@@ -8,7 +8,9 @@ INTERNAL_NETWORK="192.168.1.0/255.255.255.0"
 INTERNAL_COMPUTER="192.168.1.2"
 IN_INTERFACE="p3p1"
 EX_INTERFACE="em1"
-ALLOWED_SERVICES="www,ftp,ftp-data,ssh,1024:65535"
+TCP_ALLOWED_SERVICES="www,ftp,ftp-data,ssh,1024:65535"
+UDP_ALLOWED_SERVICES=""
+ICMP_ALLOWED_SERVICES=""
 HIGH_PORTS="1024:65535"
 
 #################################################################
@@ -28,13 +30,35 @@ iptables -P OUTPUT DROP
 
 #ALLOW FORWARDING IN IN_INTERFACE
 iptables --table nat --append POSTROUTING --out-interface $EX_INTERFACE -j MASQUERADE
-iptables -t nat -A PREROUTING -p tcp -i $EX_INTERFACE -m multiport --dports $ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
+if [-n $TCP_ALLOWED_SERVICES]
+then
+    iptables -t nat -A PREROUTING -p tcp -i $EX_INTERFACE -m multiport --dports $TCP_ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
+fi
+if [-n $UDP_ALLOWED_SERVICES]
+then
+    iptables -t nat -A PREROUTING -p udp -i $EX_INTERFACE -m multiport --dports $UDP_ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
+fi
+if [-n $ICMP_ALLOWED_SERVICES]
+then
+    
+fi
 
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
 
 #BLOCK ALL INCOMING SYNS FROM HIGH PORTS
-iptables -A FORWARD -p tcp -m multiport ! --sports $ALLOWED_SERVICES -m state --state NEW -j DROP
+if [-n $TCP_ALLOWED_SERVICES]
+then
+    iptables -A FORWARD -p tcp -m multiport ! --sports $TCP_ALLOWED_SERVICES -m state --state NEW -j DROP
+fi
+if [-n $UDP_ALLOWED_SERVICES]
+then
+    iptables -A FORWARD -p udp -m multiport ! --sports $UDP_ALLOWED_SERVICES -m state --state NEW -j DROP
+fi
+if [-n $ICMP_ALLOWED_SERVICES]
+then
+    
+fi
 
 #BLOCK ALL EXTERNAL TRAFFIC WITH AN IP ADDRESS OF THE INTERNAL NETWORK
 iptables -A FORWARD -i $EX_INTERFACE -s $INTERNAL_NETWORK -j DROP
@@ -63,7 +87,18 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Minim
 iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maximize-Throughput
 
 #PORT FORWARDING
-iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports $ALLOWED_SERVICES -j ACCEPT
+if [-n $TCP_ALLOWED_SERVICES]
+then
+    iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports $TCP_ALLOWED_SERVICES -j ACCEPT
+fi
+if [-n $UDP_ALLOWED_SERVICES]
+then
+    iptables -A FORWARD -i $EX_INTERFACE -p udp -m multiport --dports $UDP_ALLOWED_SERVICES -j ACCEPT
+fi
+if [-n $ICMP_ALLOWED_SERVICES]
+then
+    
+fi
 
 #ALLOW INBOUND/OUTBOUND tcp, udp, icmp FROM ALL PORTS
 #ACCEPT ALL TCP PACKETS THAT BELONG TO AN EXISTING CONNECTION
