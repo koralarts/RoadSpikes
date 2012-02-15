@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 TARGET = RoadSpikes
 TEMPLATE = app
@@ -13,14 +13,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     firewall.cpp \
-    addrule.cpp
+    addrule.cpp \
+    firewallproperties.cpp
 
 HEADERS  += mainwindow.h \
     firewall.h \
-    addrule.h
+    addrule.h \
+    firewallproperties.h
 
 FORMS    += mainwindow.ui \
-    addrule.ui
+    addrule.ui \
+    firewallproperties.ui
+
+
+
 
 
 

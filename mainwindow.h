@@ -26,6 +26,10 @@ private slots:
 
     void on_deleteChainButton_clicked();
 
+    void on_refreshButton_clicked();
+
+    void on_actionProperties_triggered();
+
 private:
 	Ui::MainWindow *ui; /** Form containing the main window GUI */
 

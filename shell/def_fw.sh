@@ -30,15 +30,17 @@ iptables -P OUTPUT DROP
 
 #ALLOW FORWARDING IN IN_INTERFACE
 iptables --table nat --append POSTROUTING --out-interface $EX_INTERFACE -j MASQUERADE
-if [-n $TCP_ALLOWED_SERVICES]
+if [ "$TCP_ALLOWED_SERVICES" ]
 then
     iptables -t nat -A PREROUTING -p tcp -i $EX_INTERFACE -m multiport --dports $TCP_ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
 fi
-if [-n $UDP_ALLOWED_SERVICES]
+
+if [ "$UDP_ALLOWED_SERVICES" ]
 then
     iptables -t nat -A PREROUTING -p udp -i $EX_INTERFACE -m multiport --dports $UDP_ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
 fi
-if [-n $ICMP_ALLOWED_SERVICES]
+
+if [ "$ICMP_ALLOWED_SERVICES" ]
 then
     for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
     do
@@ -50,11 +52,11 @@ fi
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
 
 #BLOCK ALL INCOMING SYNS FROM HIGH PORTS
-if [-n $TCP_ALLOWED_SERVICES]
+if [ "$TCP_ALLOWED_SERVICES" ]
 then
     iptables -A FORWARD -p tcp -m multiport ! --sports $TCP_ALLOWED_SERVICES -m state --state NEW -j DROP
 fi
-if [-n $UDP_ALLOWED_SERVICES]
+if [ "$UDP_ALLOWED_SERVICES" ]
 then
     iptables -A FORWARD -p udp -m multiport ! --sports $UDP_ALLOWED_SERVICES -m state --state NEW -j DROP
 fi
@@ -86,15 +88,15 @@ iptables -t mangle -A PREROUTING -p tcp --dport $FTP_PORT -j TOS --set-tos Minim
 iptables -t mangle -A PREROUTING -p tcp --dport $FTP_DATA -j TOS --set-tos Maximize-Throughput
 
 #PORT FORWARDING
-if [-n $TCP_ALLOWED_SERVICES]
+if [ "$TCP_ALLOWED_SERVICES" ]
 then
     iptables -A FORWARD -i $EX_INTERFACE -p tcp -m multiport --dports $TCP_ALLOWED_SERVICES -j ACCEPT
 fi
-if [-n $UDP_ALLOWED_SERVICES]
+if [ "$UDP_ALLOWED_SERVICES" ]
 then
     iptables -A FORWARD -i $EX_INTERFACE -p udp -m multiport --dports $UDP_ALLOWED_SERVICES -j ACCEPT
 fi
-if [-n $ICMP_ALLOWED_SERVICES]
+if [ "$ICMP_ALLOWED_SERVICES" ]
 then
     for TYPE in `echo ${ICMP_ALLOWED_SERVICES} | sed -e 's/[, ]\+/\n/g' -e 's/\(.*\)/\L\1/'`
     do

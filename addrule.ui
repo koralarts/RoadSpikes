@@ -156,6 +156,18 @@ Example:
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>chainText</tabstop>
+  <tabstop>interfaceText</tabstop>
+  <tabstop>protText</tabstop>
+  <tabstop>sourceIPText</tabstop>
+  <tabstop>destIpText</tabstop>
+  <tabstop>sportText</tabstop>
+  <tabstop>dportText</tabstop>
+  <tabstop>targetText</tabstop>
+  <tabstop>customText</tabstop>
+  <tabstop>okCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

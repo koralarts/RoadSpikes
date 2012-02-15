@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include "addrule.h"
+#include "firewallproperties.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,6 +30,15 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
+}
+
+void MainWindow::on_actionProperties_triggered()
+{
+    FirewallProperties *fp = new FirewallProperties();
+
+    if(fp->exec()) {
+
+    }
 }
 
 /**
@@ -245,4 +255,11 @@ void MainWindow::on_deleteChainButton_clicked()
             getIptable();
         }
     }
+}
+
+void MainWindow::on_refreshButton_clicked()
+{
+    resetTable();
+    setupTable();
+    getIptable();
 }

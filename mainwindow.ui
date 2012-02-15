@@ -64,9 +64,9 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QPushButton" name="exportFileWallButton">
+       <widget class="QPushButton" name="refreshButton">
         <property name="text">
-         <string>Export Firewall</string>
+         <string>Refresh</string>
         </property>
        </widget>
       </item>
