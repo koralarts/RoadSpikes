@@ -3,8 +3,7 @@
 #include <QDebug>
 #include <QtNetwork/QNetworkInterface>
 #include <QFile>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
+#include <QFileDialog>
 
 #define VAR_IN_NET      "%INTERNAL_NETWORK_ADDRESS%"
 #define VAR_IN_INT      "%INTERNAL_INTERFACE%"
@@ -20,8 +19,6 @@ FirewallProperties::FirewallProperties(QWidget *parent) :
     ui(new Ui::FirewallProperties)
 {
     QList<QNetworkInterface> interface = QNetworkInterface::allInterfaces();
-    QFile conf;
-    QXmlStreamReader *xmlReader;
 
     ui->setupUi(this);
 
@@ -29,12 +26,6 @@ FirewallProperties::FirewallProperties(QWidget *parent) :
         qDebug() << "Interface: " << iface.name();
         this->ui->internalInterface->addItem(iface.name());
         this->ui->externalInterface->addItem(iface.name());
-    }
-
-    if(conf.open("~/firewall.xml", QFile::ReadOnly)) {
-        xmlReader = new QXmlStreamReader(conf.readAll());
-
-
     }
 }
 
@@ -45,5 +36,34 @@ FirewallProperties::~FirewallProperties()
 
 void FirewallProperties::on_buttonBox_accepted()
 {
+    QFile fw(QDir::homePath() + "/firewall.rs");
+    QString fwName = QFileDialog::getSaveFileName(0, "Save Firewall Properties", "default_firewall.sh");
+    QString allTheThings;
+    QFile deffw(fwName);
 
+    if(!fw.open(QIODevice::ReadOnly)) {
+        qDebug() << "Cannot open firewall.rs";
+        return;
+    }
+
+    allTheThings = fw.readAll();
+
+    allTheThings = allTheThings.replace(VAR_IN_NET, this->ui->internalAddress->text());
+    allTheThings = allTheThings.replace(VAR_IN_INT, this->ui->internalInterface->currentText());
+    allTheThings = allTheThings.replace(VAR_EX_INT, this->ui->externalInterface->currentText());
+    allTheThings = allTheThings.replace(VAR_DE_GAT, this->ui->defaultGateway->text());
+    allTheThings = allTheThings.replace(VAR_IN_MAC, this->ui->internalMachine->text());
+    allTheThings = allTheThings.replace(VAR_TC_SER, this->ui->tcp->text());
+    allTheThings = allTheThings.replace(VAR_UD_SER, this->ui->udp->text());
+    allTheThings = allTheThings.replace(VAR_IC_SER, this->ui->icmp->text());
+
+    if(!deffw.open(QIODevice::WriteOnly)) {
+        qDebug() << "Cannot open " << fwName;
+        return;
+    }
+
+    deffw.write(allTheThings.toAscii());
+
+    fw.close();
+    deffw.close();
 }

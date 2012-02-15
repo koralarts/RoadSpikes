@@ -86,7 +86,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="internalAddress"/>
+      <widget class="QLineEdit" name="internalAddress">
+       <property name="text">
+        <string>192.168.1.0/255.255.255.0</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_7">
@@ -103,10 +107,18 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="defaultGateway">
+       <property name="text">
+        <string>192.168.1.3</string>
+       </property>
+      </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QLineEdit" name="lineEdit_2"/>
+      <widget class="QLineEdit" name="internalMachine">
+       <property name="text">
+        <string>192.168.1.2</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="internalInterface"/>
@@ -132,8 +144,8 @@
   <tabstop>internalAddress</tabstop>
   <tabstop>internalInterface</tabstop>
   <tabstop>externalInterface</tabstop>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>lineEdit_2</tabstop>
+  <tabstop>defaultGateway</tabstop>
+  <tabstop>internalMachine</tabstop>
   <tabstop>tcp</tabstop>
   <tabstop>udp</tabstop>
   <tabstop>icmp</tabstop>
@@ -141,22 +153,6 @@
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>FirewallProperties</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>368</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>150</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
@@ -169,6 +165,22 @@
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
+     <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>FirewallProperties</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
      <y>150</y>
     </hint>
    </hints>

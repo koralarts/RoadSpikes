@@ -15,6 +15,9 @@ public:
     explicit FirewallProperties(QWidget *parent = 0);
     ~FirewallProperties();
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::FirewallProperties *ui;
 };
