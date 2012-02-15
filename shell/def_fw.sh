@@ -5,6 +5,7 @@
 #USER-DEFINED VARIABLES
 DEF_GATEWAY="192.168.1.3"
 INTERNAL_NETWORK="192.168.1.0/255.255.255.0"
+INTERNAL_COMPUTER="192.168.1.2"
 IN_INTERFACE="p3p1"
 EX_INTERFACE="em1"
 ALLOWED_SERVICES="www,ftp,ftp-data,ssh,1024:65535"
@@ -26,8 +27,8 @@ iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 
 #ALLOW FORWARDING IN IN_INTERFACE
-iptables --table nat --append POSTROUTING --out-interface em1 -j MASQUERADE
-iptables -t nat -A PREROUTING -p tcp -i em1 -m multiport --dports $ALLOWED_SERVICES -j DNAT --to 192.168.1.2
+iptables --table nat --append POSTROUTING --out-interface $EX_INTERFACE -j MASQUERADE
+iptables -t nat -A PREROUTING -p tcp -i $EX_INTERFACE -m multiport --dports $ALLOWED_SERVICES -j DNAT --to $INTERNAL_COMPUTER
 
 #FORWARDING
 iptables --append FORWARD --in-interface $IN_INTERFACE -j ACCEPT
